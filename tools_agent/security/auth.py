@@ -70,6 +70,7 @@ async def get_current_user(authorization: str | None) -> Auth.types.MinimalUserD
 
 
 @auth.on.threads.create
+@auth.on.threads.create_run
 async def on_thread_create(
     ctx: Auth.types.AuthContext,
     value: Auth.types.on.threads.create.value,
@@ -88,9 +89,6 @@ async def on_thread_create(
     # This metadata is stored with the thread and persists
     metadata = value.setdefault("metadata", {})
     metadata["owner"] = ctx.user.identity
-
-    # Return filter to restrict access to just the creator
-    return {"owner": ctx.user.identity}
 
 
 @auth.on.threads.read
@@ -125,9 +123,6 @@ async def on_assistants_create(
     # This metadata is stored with the assistant and persists
     metadata = value.setdefault("metadata", {})
     metadata["owner"] = ctx.user.identity
-
-    # Return filter to restrict access to just the creator
-    return {"owner": ctx.user.identity}
 
 
 @auth.on.assistants.read
